@@ -58,9 +58,10 @@ class SocialGraph:
 
         The number of users must be greater than the average number of friendships.
         """
-        # self.last_id = 0
-        # self.users = {}
-        # self.friendships = {}
+        # Reset Graph
+        self.last_id = 0
+        self.users = {}
+        self.friendships = {}
         
         for i in range(0, num_users):
             self.add_user(f"User {i}")
