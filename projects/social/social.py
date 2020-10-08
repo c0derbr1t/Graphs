@@ -1,6 +1,23 @@
 import random
 import math
 
+class Queue():
+    '''Quick queue class to assist with Graph class'''
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, value):
+        self.queue.append(value)
+
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop()
+        else:
+            return None
+
+    def size(self):
+        return len(self.queue)
+        
 class User:
     def __init__(self, name):
         self.name = name
@@ -41,10 +58,10 @@ class SocialGraph:
 
         The number of users must be greater than the average number of friendships.
         """
-        self.last_id = 0
-        self.users = {}
-        self.friendships = {}
-
+        # self.last_id = 0
+        # self.users = {}
+        # self.friendships = {}
+        
         for i in range(0, num_users):
             self.add_user(f"User {i}")
 
@@ -55,7 +72,6 @@ class SocialGraph:
                 possible_friendships.append((user_id, friend_id))
 
         random.shuffle(possible_friendships)
-        x = 0 # WHAT IS x???????
 
         for i in range(0, math.floor(num_users * avg_friendships / 2)):
             friendship = possible_friendships[i]
@@ -71,11 +87,21 @@ class SocialGraph:
         The key is the friend's ID and the value is the path.
         """
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
-        
+        q = Queue()
 
-        ### ! AHHHHHHHHHHHHHHHHHHHHHHHHHHHHS
+        q.enqueue([user_id])
 
+        while q.size() > 0:
+            path = q.dequeue()
+            v = path[-1]
+
+            if v not in visited:
+                visited[v] = path
+
+                for friend in self.friendships[v]:
+                    if friend not in visited:
+                        new_path = path + [friend]
+                        q.enqueue(new_path)
 
         return visited
 
@@ -84,5 +110,6 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
     print(sg.friendships)
+    print("\n")
     connections = sg.get_all_social_paths(1)
     print(connections)
